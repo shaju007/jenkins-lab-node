@@ -65,9 +65,9 @@ pipeline {
       echo "Pipeline failed: ${env.BUILD_URL}"
     }
     always {
-         junit 'reports/junit.xml'
-         archiveArtifacts artifacts: 'reports/**', fingerprint: true
-         echo "Job: ${env.JOB_NAME} #${env.BUILD_NUMBER}"
-    }
+    junit testResults: 'reports/junit.xml', allowEmptyResults: true
+    archiveArtifacts artifacts: 'reports/**', allowEmptyArchive: true, fingerprint: true
+    echo "Build URL: ${env.BUILD_URL}"
+  }
   }
 }
