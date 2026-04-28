@@ -18,28 +18,19 @@ pipeline {
     }
 
     stage('Lint') {
-  steps {
-    sh '''
-      set -euxo pipefail
-      docker run --rm \
-        -v "$WORKSPACE":/workspace \
-        -w /workspace \
-        "$NODE_IMAGE" \
-        /bin/sh -c "set -eux; test -f /workspace/package.json; npm run lint"
-    '''
-  }
-}
-
+      steps {
+        sh '''
+          set -euxo pipefail
+          docker run --rm -v "$WORKSPACE":/workspace -w /workspace "$NODE_IMAGE" npm run lint
+        '''
+      }
+    }
 
     stage('Test') {
       steps {
         sh '''
           set -euxo pipefail
-          docker run --rm \
-            -v "$WORKSPACE":/workspace \
-            -w /workspace \
-            "$NODE_IMAGE" \
-            /bin/sh -c "set -eux; test -f /workspace/package.json; npm test"
+          docker run --rm -v "$WORKSPACE":/workspace -w /workspace "$NODE_IMAGE" npm test
         '''
       }
     }
@@ -48,27 +39,17 @@ pipeline {
       steps {
         sh '''
           set -euxo pipefail
-          docker run --rm \
-            -v "$WORKSPACE":/workspace \
-            -w /workspace \
-            "$NODE_IMAGE" \
-            /bin/sh -c "set -eux; test -f /workspace/package.json; npm run build"
+          docker run --rm -v "$WORKSPACE":/workspace -w /workspace "$NODE_IMAGE" npm run build
         '''
       }
     }
   }
 
   post {
-    success {
-      echo "Pipeline finished successfully: ${env.BUILD_URL}"
-    }
-    failure {
-      echo "Pipeline failed: ${env.BUILD_URL}"
-    }
     always {
-    junit testResults: 'reports/junit.xml', allowEmptyResults: true
-    archiveArtifacts artifacts: 'reports/**', allowEmptyArchive: true, fingerprint: true
-    echo "Build URL: ${env.BUILD_URL}"
-  }
+      junit testResults: 'reports/junit.xml', allowEmptyResults: true
+      archiveArtifacts artifacts: 'reports/**', allowEmptyArchive: true, fingerprint: true
+      echo "Build URL: ${env.BUILD_URL}"
+    }
   }
 }
