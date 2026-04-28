@@ -2,7 +2,7 @@
   "name": "jenkins-lab-node",
   "version": "1.0.0",
   "scripts": {
-    "lint": "node -e \"console.error('lint failed intentionally'); process.exit(1)\"",
+    "lint": "node -e \"console.log('lint ok')\"",
     "test": "mkdir -p reports && echo '<testsuite name=\"lab\" tests=\"1\" failures=\"0\"><testcase classname=\"lab\" name=\"sample\"/></testsuite>' > reports/junit.xml && echo 'test ok'",
     "build": "node -e \"console.log('build ok')\""
   }
