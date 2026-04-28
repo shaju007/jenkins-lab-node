@@ -1,0 +1,4 @@
+jenkins_home/
+node_modules/
+reports/
+.DS_Store
