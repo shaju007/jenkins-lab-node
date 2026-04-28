@@ -2,7 +2,6 @@ pipeline {
   agent any
 
   environment {
-    HOST_PROJECT_DIR = '/Users/sshaju/jenkins-lab-node'
     NODE_IMAGE = 'node:20-alpine'
   }
 
@@ -23,7 +22,7 @@ pipeline {
         sh '''
           set -euxo pipefail
           docker run --rm \
-            -v "$HOST_PROJECT_DIR":/workspace \
+            -v "$WORKSPACE":/workspace \
             -w /workspace \
             "$NODE_IMAGE" \
             sh -lc "test -f package.json && npm run lint"
@@ -36,7 +35,7 @@ pipeline {
         sh '''
           set -euxo pipefail
           docker run --rm \
-            -v "$HOST_PROJECT_DIR":/workspace \
+            -v "$WORKSPACE":/workspace \
             -w /workspace \
             "$NODE_IMAGE" \
             sh -lc "test -f package.json && npm test"
@@ -49,7 +48,7 @@ pipeline {
         sh '''
           set -euxo pipefail
           docker run --rm \
-            -v "$HOST_PROJECT_DIR":/workspace \
+            -v "$WORKSPACE":/workspace \
             -w /workspace \
             "$NODE_IMAGE" \
             sh -lc "test -f package.json && npm run build"
