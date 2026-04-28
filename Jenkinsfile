@@ -20,13 +20,13 @@ pipeline {
     stage('Lint') {
       steps {
         sh '''
-          set -euxo pipefail
-          docker run --rm \
-            -v "$WORKSPACE":/workspace \
-            -w /workspace \
-            "$NODE_IMAGE" \
-            sh -lc "test -f package.json && npm run lint"
-        '''
+      set -euxo pipefail
+      docker run --rm \
+        -v "$WORKSPACE":/workspace \
+        -w /workspace \
+        "$NODE_IMAGE" \
+        sh -lc 'set -eux; test -f package.json; npm run lint'
+    '''
       }
     }
 
@@ -38,7 +38,7 @@ pipeline {
             -v "$WORKSPACE":/workspace \
             -w /workspace \
             "$NODE_IMAGE" \
-            sh -lc "test -f package.json && npm test"
+            sh -lc 'set -eux; test -f package.json; npm test'
         '''
       }
     }
@@ -51,7 +51,7 @@ pipeline {
             -v "$WORKSPACE":/workspace \
             -w /workspace \
             "$NODE_IMAGE" \
-            sh -lc "test -f package.json && npm run build"
+            sh -lc 'set -eux; test -f package.json; npm run build'
         '''
       }
     }
