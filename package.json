@@ -1,0 +1,9 @@
+{
+  "name": "jenkins-lab-node",
+  "version": "1.0.0",
+  "scripts": {
+    "lint": "node -e \"console.log('lint ok')\"",
+    "test": "node -e \"console.log('test ok')\"",
+    "build": "node -e \"console.log('build ok')\""
+  }
+}
