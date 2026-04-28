@@ -1,8 +1,9 @@
 pipeline {
   agent any
 
-  environment {
-    NODE_IMAGE = 'node:20-alpine'
+  options {
+    timestamps()
+    disableConcurrentBuilds()
   }
 
   stages {
@@ -10,37 +11,37 @@ pipeline {
       steps {
         sh '''
           set -euxo pipefail
-          docker --version
-          docker ps
-          docker pull "$NODE_IMAGE"
+          node --version
+          npm --version
+          git --version
+        '''
+      }
+    }
+
+    stage('Install') {
+      steps {
+        sh '''
+          set -euxo pipefail
+          npm ci --no-audit --no-fund || npm install --no-audit --no-fund
         '''
       }
     }
 
     stage('Lint') {
       steps {
-        sh '''
-          set -euxo pipefail
-          docker run --rm -v "$WORKSPACE":/workspace -w /workspace "$NODE_IMAGE" npm run lint
-        '''
+        sh 'npm run lint'
       }
     }
 
     stage('Test') {
       steps {
-        sh '''
-          set -euxo pipefail
-          docker run --rm -v "$WORKSPACE":/workspace -w /workspace "$NODE_IMAGE" npm test
-        '''
+        sh 'npm test'
       }
     }
 
     stage('Build') {
       steps {
-        sh '''
-          set -euxo pipefail
-          docker run --rm -v "$WORKSPACE":/workspace -w /workspace "$NODE_IMAGE" npm run build
-        '''
+        sh 'npm run build'
       }
     }
   }
